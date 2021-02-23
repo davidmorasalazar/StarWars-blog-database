@@ -8,13 +8,6 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Favorites(Base): 
-    __tablename__ = 'Favorites'
-    User_ID = Column(Integer,primary_key=True)
-    # FavoritesPlanet_ID = Column(Integer)
-    # FavoritesPerson_ID = Column(Integer)
-
-
 class CardPerson(Base):
     __tablename__ = 'CardPerson'
     #Siempre usar guion bajo cuando se hace una tabla
@@ -39,9 +32,19 @@ class CardPlanet(Base):
     Orbital_Period = Column(Integer)
     #person_id = Column(Integer, ForeignKey('CardPerson.id'))
     person = relationship(CardPerson)
-
-    def to_dict(self):
-        return {}
+    
+class Favorites(Base): 
+    __tablename__ = 'Favorites'
+    User_ID = Column(Integer,primary_key=True)
+    FavoritesPlanet_ID = Column(Integer)
+    FavoritesPerson_ID = Column(Integer)
+    person_id = Column(Integer, ForeignKey('CardPerson.id'))
+    planet_id = Column(Integer, ForeignKey('CardPlanet.id'))
+class User(Base):
+    __tablename__ = 'User'
+    User_ID = Column(Integer,primary_key=True)
+    Name = Column(String(250), nullable=False)
+    favorites_id = Column(Integer, ForeignKey('Favorites.User_ID'))
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram2.png')
